@@ -124,6 +124,7 @@ if choice == '1':
         pipe_rect_up.append(pipe_surface_up[i].get_rect(center=(1000 + i * 432, pipey)))
         pipe_rect_down.append(pipe_surface_down[i].get_rect(center=(1000 + i * 432, pipey + pipe_space)))
 
+    #Game loop    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
