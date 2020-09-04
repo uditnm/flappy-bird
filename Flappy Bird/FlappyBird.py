@@ -12,11 +12,17 @@ if choice == '1':
     def random_no():
         return random.randint(-280, 50)
 
+    #Level UP
+    def lvlup():
+        global pipe_speed, pipe_space
+        pipe_space -= 10
+        pipe_speed -= 1
+
     # Pipes mover
     def PipesMover():
         for j in range(3):
-            pipe_rect_up[j] = pipe_rect_up[j].move((-5, 0))
-            pipe_rect_down[j] = pipe_rect_down[j].move((-5, 0))
+            pipe_rect_up[j] = pipe_rect_up[j].move((pipe_speed, 0))
+            pipe_rect_down[j] = pipe_rect_down[j].move((pipe_speed, 0))
 
 
     # pipes printer
@@ -32,7 +38,7 @@ if choice == '1':
             if pipe_rect_up[l].right < 0:
                 pipe_y = random_no()
                 pipe_rect_up[l] = pipe_surface_up[l].get_rect(center=(1290, pipe_y))
-                pipe_rect_down[l] = pipe_surface_down[l].get_rect(center=(1290, pipe_y + 850))
+                pipe_rect_down[l] = pipe_surface_down[l].get_rect(center=(1290, pipe_y + pipe_space))
 
 
     # Collison Detector
@@ -78,6 +84,9 @@ if choice == '1':
     frame = 0
     frame_speed = 0.2
     score = 0
+    lvlup_counter = 0
+    pipe_space = 850
+    pipe_speed = -5
 
     # clock
     clock = pygame.time.Clock()
@@ -113,7 +122,7 @@ if choice == '1':
         pipe_surface_down.append(pygame.image.load('Assets/Pipe.png').convert())
         pipey = random_no()
         pipe_rect_up.append(pipe_surface_up[i].get_rect(center=(1000 + i * 432, pipey)))
-        pipe_rect_down.append(pipe_surface_down[i].get_rect(center=(1000 + i * 432, pipey + 850)))
+        pipe_rect_down.append(pipe_surface_down[i].get_rect(center=(1000 + i * 432, pipey + pipe_space)))
 
     while True:
         for event in pygame.event.get():
@@ -126,11 +135,15 @@ if choice == '1':
         speed = speed + gravity
         frame = frame + frame_speed
         score = score + 0.01
+        lvlup_counter = lvlup_counter + 1
         if int(frame) > 2:
             frame = 0
         ball_rect = ball_rect.move((0, int(speed)))
         if ground_rect.right <= 0:
             ground_rect.left = 0
+        if lvlup_counter > 2000:
+            lvlup_counter = 0
+            lvlup()
         ground_rect = ground_rect.move(-5, 0)
         PipesMover()
         PipesRegenerator()
